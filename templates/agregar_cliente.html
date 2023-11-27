@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Inserción de Cliente</title>
+    <style>
+        .custom-bg {
+        background-color: #8B0000 !important;
+        border-color: #8B0000 !important;
+
+        }
+    </style>
+</head>
+<body>
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Registrar de Cliente</h2>
+    <form method="POST" action="{{ url_for('guardar_cliente') }}">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+            <label for="apellido_paterno">Apellido Paterno:</label>
+            <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" required>
+        </div>
+        <div class="form-group">
+            <label for="apellido_materno">Apellido Materno:</label>
+            <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" required>
+        </div>
+        <div class="form-group">
+            <label for="telefono">Número de Teléfono:</label>
+            <input type="tel" class="form-control" id="telefono" name="telefono" required>
+        </div>
+        <div class="form-group">
+            <label for="correo">Correo:</label>
+            <input type="email" class="form-control" id="correo" name="correo" required>
+        </div>
+        <div class="form-group">
+            <label>Fecha de Nacimiento:</label>
+            <div class="mb-3">
+                <input type="date" class="form-control" name="fecha_nacimiento" required/>
+            </div>
+            <div class="input-group date" id="datepicker" data-target-input="nearest">
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary custom-bg btn-block">Insertar Cliente</button>
+            </div>
+            <div class="col-6">
+                <a href="{{ url_for('ver_cliente') }}" class="btn btn-secondary btn-block">Volver</a>
+            </div>
+        </div>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} mt-3" role="alert">
+        <strong>{{ message }}</strong>
+    </div>
+    {% endfor %}
+    {% endwith %}
+</div>
+
+{% endblock %}
+
+</body>
+</html>

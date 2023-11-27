@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>FlaskBlog</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .center-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+
+        .badge-primary {
+            background-color: #007bff; /* Color del distintivo (badge) */
+        }
+
+        hr {
+            border-color: #ccc; /* Color de la línea horizontal */
+            margin: 20px 0;
+        }
+
+    </style>
+</head>
+<body>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="center-content">
+    <h1 class="title">{% block title %} Umbrella Corporation {% endblock %}</h1>
+    <img src="https://seeklogo.com/images/U/umbrella-corporation-logo-59C799E7A5-seeklogo.com.png"
+         alt="Logo de Umbrella Corporation">
+    <hr>
+    {% endblock %}
+</div>
+
+<h1>Welcome to FlaskBlog</h1>
+</body>
+</html>
