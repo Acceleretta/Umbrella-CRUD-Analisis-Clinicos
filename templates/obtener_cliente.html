@@ -11,8 +11,6 @@
             background-color: #8B0000 !important;
             border-color: #8B0000 !important;
         }
-
-
     </style>
 </head>
 <body>
@@ -21,42 +19,64 @@
 
 <div class="container mt-5">
     <h3 class="display-4 text-center mb-4">Manejo de Clientes</h3>
-    <a href="{{url_for('formulario_agregar_cliente')}}" class="btn btn-success custom-bg mb-3">Agregar Cliente</a>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Nombre</th>
-            <th scope="col">Apellido Paterno</th>
-            <th scope="col">Apellido Materno</th>
-            <th scope="col">Fecha de Nacimiento</th>
-            <th scope="col">Teléfono</th>
-            <th scope="col">Correo</th>
-            <th scope="col">Editar</th>
-            <th scope="col">Eliminar</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for cliente in clientes %}
-        <tr>
-            <td>{{cliente[1]}}</td>
-            <td>{{cliente[2]}}</td>
-            <td>{{cliente[3]}}</td>
-            <td>{{cliente[4]}}</td>
-            <td>{{cliente[5]}}</td>
-            <td>{{cliente[6]}}</td>
-            <td>
-                <a href="" class="btn btn-info custom-bg btn-sm">Editar</a>
-            </td>
-            <td>
-                <form action="{{url_for('eliminar_cliente')}}" method="POST">
-                    <input type="hidden" name="id" value="{{cliente[0]}}">
-                    <button type="submit" class="btn btn-danger custom-bg btn-sm">Eliminar</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- Agregar Cliente Button -->
+        <a href="{{ url_for('formulario_agregar_cliente') }}" class="btn btn-success custom-bg me-4">Agregar Cliente</a>
+        <!--         <form class="flex-grow-1 me-3" method="POST" action="">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar clientes..." name="search_query">
+                <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+            </div>
+        </form> -->
+
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido Paterno</th>
+                <th scope="col">Apellido Materno</th>
+                <th scope="col">Fecha de Nacimiento</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Eliminar</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{cliente[1]}}</td>
+                <td>{{cliente[2]}}</td>
+                <td>{{cliente[3]}}</td>
+                <td>{{cliente[4]}}</td>
+                <td>{{cliente[5]}}</td>
+                <td>{{cliente[6]}}</td>
+                <td>
+                    <a href="{{url_for('formulario_editar_cliente', idCliente=cliente[0])}}"
+                       class="btn btn-danger custom-bg btn-sm">Editar</a>
+                </td>
+                <td>
+                    <form action="{{url_for('eliminar_cliente')}}" method="POST">
+                        <input type="hidden" name="id" value="{{cliente[0]}}">
+                        <button type="submit" class="btn btn-danger custom-bg btn-sm">Ordenar Analisis</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{{url_for('eliminar_cliente')}}" method="POST">
+                        <input type="hidden" name="id" value="{{cliente[0]}}">
+                        <button type="submit" class="btn btn-dark">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 {% endblock %}

@@ -12,6 +12,16 @@ def insertar_cliente(nombreCliente, apellidoPatCliente, apellidoMatCliente, naci
     conn.close()
 
 
+def buscar_clientes(nombreCliente=None, apellidoPatCliente=None, apellidoMatCliente=None):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        cursor.callproc('sp_buscar_clientes',
+                        (nombreCliente, apellidoPatCliente, apellidoMatCliente))
+        clientes = cursor.fetchall()
+    conn.close()
+    return clientes
+
+
 def obtener_cliente():
     conn = get_connection()
     try:
@@ -35,7 +45,7 @@ def borrar_cliente(idCliente):
 def obtener_cliente_por_id(idCliente):
     conn = get_connection()
     with conn.cursor() as cursor:
-        cursor.callproc('sp_obtener_cliente_id', idCliente)
+        cursor.callproc('sp_obtener_cliente_id', (idCliente,))
         cliente = cursor.fetchone()
     conn.commit()
     conn.close()
@@ -52,3 +62,8 @@ def modificar_cliente(idCliente, nombreCliente, apellidoPatCliente, apellidoMatC
                          correoCliente))
     conn.commit()
     conn.close()
+
+
+def generar_orden()
+
+    sp_registrar_cliente_generar_orden

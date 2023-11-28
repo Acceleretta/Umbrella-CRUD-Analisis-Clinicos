@@ -23,17 +23,41 @@ def eliminar_cliente():
     return redirect("/ver_cliente")
 
 
-@app.route("/formulario_editar_cliente/<int:id>")
-def editar_cliente(idCliente):
-    cliente = obtener_cliente_por_id(id)
+@app.route("/formulario_editar_cliente/<int:idCliente>")
+def formulario_editar_cliente(idCliente):
+    cliente = obtener_cliente_por_id(idCliente)
     return render_template("editar_cliente.html", cliente=cliente)
 
 
-@app.route("/actualizar_juego", methods=["POST"])
+'''@app.route("/buscar_cliente", methods=["GET", "POST"])
+def buscar_cliente():
+    if request.method == "POST":
+        # Obtener parámetros del formulario de búsqueda
+        nombre = request.form.get("nombre") or None
+        apellido_paterno = request.form.get("apellido_paterno") or None
+        apellido_materno = request.form.get("apellido_materno") or None
+
+        # Realizar la búsqueda y obtener resultados
+        clientes = buscar_clientes(nombre, apellido_paterno, apellido_materno)
+
+        # Flash y redirigir si es necesario
+        print(clientes)  # Agrega esta línea para imprimir los resultados en la consola del servidor
+
+        return render_template("obtener_cliente.html", clientes=clientes)
+
+    # Resto de la lógica para el método GET
+    clientes = obtener_cliente()
+    print(clientes)  # Agrega esta línea para imprimir los resultados en la consola del servidor
+    return render_template("obtener_cliente.html", clientes=clientes)'''
+
+
+
+@app.route("/actualizar_cliente", methods=["POST"])
 def actualizar_cliente():
     modificar_cliente(request.form["id"], request.form["nombre"], request.form["apellido_paterno"],
                       request.form["apellido_materno"], request.form["fecha_nacimiento"], request.form["telefono"],
                       request.form["correo"])
+    flash("Cliente editado exitosamente!", "success")
     return redirect("/ver_cliente")
 
 
