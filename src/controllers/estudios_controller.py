@@ -1,25 +1,13 @@
 from src.database.db_mysql import get_connection
 
 
-def insertar_cliente(nombreCliente, apellidoPatCliente, apellidoMatCliente, nacimientoCliente, telefonoCliente,
-                     correoCliente):
+def insertar_estudio(nombreEstudio, costoEstudio, rangoIncioEstudio, rangoFinEstudio):
     conn = get_connection()
     with conn.cursor() as cursor:
-        cursor.callproc('sp_insertar_cliente',
-                        (nombreCliente, apellidoPatCliente, apellidoMatCliente, nacimientoCliente, telefonoCliente,
-                         correoCliente))
+        cursor.callproc('sp_insertar_estudio',
+                        (nombreEstudio, costoEstudio, rangoIncioEstudio, rangoFinEstudio))
     conn.commit()
     conn.close()
-
-
-def buscar_clientes(nombreCliente=None, apellidoPatCliente=None, apellidoMatCliente=None):
-    conn = get_connection()
-    with conn.cursor() as cursor:
-        cursor.callproc('sp_buscar_clientes',
-                        (nombreCliente, apellidoPatCliente, apellidoMatCliente))
-        clientes = cursor.fetchall()
-    conn.close()
-    return clientes
 
 
 def obtener_estudio():
@@ -34,35 +22,38 @@ def obtener_estudio():
     return estudios
 
 
-def borrar_cliente(idCliente):
+def borrar_estudio(idEstudio):
     conn = get_connection()
     with conn.cursor() as cursor:
-        cursor.callproc('sp_borrar_cliente', idCliente)
+        cursor.callproc('sp_borrar_estudio', idEstudio)
     conn.commit()
     conn.close()
 
 
-def obtener_cliente_por_id(idCliente):
+def obtener_estudio_por_id(idEstudio):
     conn = get_connection()
     with conn.cursor() as cursor:
-        cursor.callproc('sp_obtener_cliente_id', (idCliente,))
-        cliente = cursor.fetchone()
+        cursor.callproc('sp_obtener_estudio_id', (idEstudio,))
+        estudio = cursor.fetchone()
     conn.commit()
     conn.close()
-    return cliente
+    return estudio
 
 
-def modificar_cliente(idCliente, nombreCliente, apellidoPatCliente, apellidoMatCliente, nacimientoCliente,
-                      telefonoCliente, correoCliente):
+def modificar_estudio(idEstudio, nombreEstudio, costoEstudio, rangoIncioEstudio, rangoFinEstudio):
     conn = get_connection()
     with conn.cursor() as cursor:
-        cursor.callproc('sp_actualizar_cliente',
-                        (idCliente, nombreCliente, apellidoPatCliente, apellidoMatCliente, nacimientoCliente,
-                         telefonoCliente,
-                         correoCliente))
+        cursor.callproc('sp_actualizar_estudio',
+                        (idEstudio, nombreEstudio, costoEstudio, rangoIncioEstudio, rangoFinEstudio))
     conn.commit()
     conn.close()
 
 
-def generar_orden():
-    '''sp_registrar_cliente_generar_orden'''
+'''def buscar_clientes(nombreCliente=None, apellidoPatCliente=None, apellidoMatCliente=None):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        cursor.callproc('sp_buscar_clientes',
+                        (nombreCliente, apellidoPatCliente, apellidoMatCliente))
+        clientes = cursor.fetchall()
+    conn.close()
+    return clientes'''

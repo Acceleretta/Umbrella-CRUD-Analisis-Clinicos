@@ -84,9 +84,38 @@ def ver_estudio():
     return render_template("estudios/obtener_estudios.html", estudios=estudios)
 
 
-'''@app.route("/formulario_agregar_estudio")
+@app.route("/formulario_agregar_estudio")
 def formulario_agregar_estudio():
-    return render_template("estudios/agregar_estudio.html")'''
+    return render_template("estudios/agregar_estudio.html")
+
+
+@app.route("/guardar_estudio", methods=["POST"])
+def guardar_estudio():
+    insertar_estudio(request.form["nombre"], request.form["precio"], request.form["rango_inicio"],
+                     request.form["rango_fin"])
+    flash("Estudio guardado exitosamente!", "success")
+
+    return redirect(url_for('formulario_agregar_estudio'))
+
+
+@app.route("/eliminar_estudio", methods=["POST"])
+def eliminar_estudio():
+    borrar_estudio(request.form["id"])
+    return redirect("/ver_estudio")
+
+
+@app.route("/formulario_editar_estudio/<int:idEstudio>")
+def formulario_editar_estudio(idEstudio):
+    estudio = obtener_estudio_por_id(idEstudio)
+    return render_template("estudios/editar_estudio.html", estudio=estudio)
+
+
+@app.route("/actualizar_estudio", methods=["POST"])
+def actualizar_estudio():
+    modificar_estudio(request.form["id"], request.form["nombre"], request.form["precio"], request.form["rango_inicio"],
+                      request.form["rango_fin"])
+    flash("Estudio editado exitosamente!", "success")
+    return redirect("/ver_estudio")
 
 
 app.run(host='0.0.0.0', port=81)

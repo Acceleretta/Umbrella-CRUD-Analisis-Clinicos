@@ -22,7 +22,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <!-- Agregar Cliente Button -->
-        <a href="{{ url_for('formulario_agregar_cliente') }}" class="btn btn-success custom-bg me-4">Agregar Estudio</a>
+        <a href="{{ url_for('formulario_agregar_estudio') }}" class="btn btn-success custom-bg me-4">Agregar Estudio</a>
         <!--         <form class="flex-grow-1 me-3" method="POST" action="">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Buscar clientes..." name="search_query">
@@ -48,19 +48,14 @@
                 <td>{{estudio[3]}}</td>
                 <td>{{estudio[4]}}</td>
                 <td>
-                    <a href="{{url_for('formulario_editar_cliente', idCliente=estudio[0])}}"
+                <td>
+                    <a href="{{url_for('formulario_editar_estudio', idEstudio = estudio[0])}}"
                        class="btn btn-danger custom-bg btn-sm">Editar</a>
                 </td>
                 <td>
-                    <form action="{{url_for('eliminar_cliente')}}" method="POST">
+                    <form action="{{url_for('eliminar_estudio')}}" method="POST">
                         <input type="hidden" name="id" value="{{estudio[0]}}">
-                        <button type="submit" class="btn btn-danger custom-bg btn-sm">Ordenar Analisis</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="{{url_for('eliminar_cliente')}}" method="POST">
-                        <input type="hidden" name="id" value="{{estudio[0]}}">
-                        <button type="submit" class="btn btn-dark">Eliminar</button>
+                        <button type="submit" class="btn btn-dark btn-sm">Eliminar</button>
                     </form>
                 </td>
             </tr>
