@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Ver Estudios</title>
+    <style>
+        .custom-bg {
+            background-color: #8B0000 !important;
+            border-color: #8B0000 !important;
+        }
+    </style>
+</head>
+<body>
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <h3 class="display-4 text-center mb-4">Manejo de Estudios</h3>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- Agregar Cliente Button -->
+        <a href="{{ url_for('formulario_agregar_cliente') }}" class="btn btn-success custom-bg me-4">Agregar Estudio</a>
+        <!--         <form class="flex-grow-1 me-3" method="POST" action="">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar clientes..." name="search_query">
+                <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+            </div>
+        </form> -->
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Rango de Inicio</th>
+                <th scope="col">Rango de Fin</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for estudio in estudios %}
+            <tr>
+                <td>{{estudio[1]}}</td>
+                <td>{{estudio[2]}}</td>
+                <td>{{estudio[3]}}</td>
+                <td>{{estudio[4]}}</td>
+                <td>
+                    <a href="{{url_for('formulario_editar_cliente', idCliente=estudio[0])}}"
+                       class="btn btn-danger custom-bg btn-sm">Editar</a>
+                </td>
+                <td>
+                    <form action="{{url_for('eliminar_cliente')}}" method="POST">
+                        <input type="hidden" name="id" value="{{estudio[0]}}">
+                        <button type="submit" class="btn btn-danger custom-bg btn-sm">Ordenar Analisis</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{{url_for('eliminar_cliente')}}" method="POST">
+                        <input type="hidden" name="id" value="{{estudio[0]}}">
+                        <button type="submit" class="btn btn-dark">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}
+</body>
+</html>

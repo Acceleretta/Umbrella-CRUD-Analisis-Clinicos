@@ -11,6 +11,7 @@
             background-color: #8B0000 !important;
             border-color: #8B0000 !important;
         }
+
     </style>
 </head>
 <body>
@@ -42,8 +43,6 @@
                 <th scope="col">Fecha de Nacimiento</th>
                 <th scope="col">Teléfono</th>
                 <th scope="col">Correo</th>
-                <th scope="col">Editar</th>
-                <th scope="col">Eliminar</th>
             </tr>
             </thead>
             <tbody>
@@ -62,13 +61,14 @@
                 <td>
                     <form action="{{url_for('eliminar_cliente')}}" method="POST">
                         <input type="hidden" name="id" value="{{cliente[0]}}">
-                        <button type="submit" class="btn btn-danger custom-bg btn-sm">Ordenar Analisis</button>
+                        <button type="submit" class="btn btn-danger custom-bg btn-sm">Ordenar Analisis
+                        </button>
                     </form>
                 </td>
                 <td>
                     <form action="{{url_for('eliminar_cliente')}}" method="POST">
                         <input type="hidden" name="id" value="{{cliente[0]}}">
-                        <button type="submit" class="btn btn-dark">Eliminar</button>
+                        <button type="submit" class="btn btn-dark btn-sm">Eliminar</button>
                     </form>
                 </td>
             </tr>

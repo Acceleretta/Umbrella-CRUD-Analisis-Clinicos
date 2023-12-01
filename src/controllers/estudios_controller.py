@@ -22,16 +22,16 @@ def buscar_clientes(nombreCliente=None, apellidoPatCliente=None, apellidoMatClie
     return clientes
 
 
-def obtener_cliente():
+def obtener_estudio():
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
-            cursor.callproc('sp_obtener_cliente')
-            clientes = cursor.fetchall()
+            cursor.callproc('sp_obtener_estudio')
+            estudios = cursor.fetchall()
     finally:
         conn.close()
 
-    return clientes
+    return estudios
 
 
 def borrar_cliente(idCliente):

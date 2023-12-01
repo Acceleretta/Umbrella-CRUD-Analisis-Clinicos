@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, flash, url_for
 
 from src.controllers.clientes_controller import *
+from src.controllers.estudios_controller import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
@@ -14,7 +15,7 @@ def index():
 @app.route('/ver_cliente')
 def ver_cliente():
     clientes = obtener_cliente()
-    return render_template("obtener_cliente.html", clientes=clientes)
+    return render_template("clientes/obtener_cliente.html", clientes=clientes)
 
 
 @app.route("/eliminar_cliente", methods=["POST"])
@@ -26,7 +27,7 @@ def eliminar_cliente():
 @app.route("/formulario_editar_cliente/<int:idCliente>")
 def formulario_editar_cliente(idCliente):
     cliente = obtener_cliente_por_id(idCliente)
-    return render_template("editar_cliente.html", cliente=cliente)
+    return render_template("clientes/editar_cliente.html", cliente=cliente)
 
 
 '''@app.route("/buscar_cliente", methods=["GET", "POST"])
@@ -51,7 +52,6 @@ def buscar_cliente():
     return render_template("obtener_cliente.html", clientes=clientes)'''
 
 
-
 @app.route("/actualizar_cliente", methods=["POST"])
 def actualizar_cliente():
     modificar_cliente(request.form["id"], request.form["nombre"], request.form["apellido_paterno"],
@@ -63,7 +63,7 @@ def actualizar_cliente():
 
 @app.route('/formulario_agregar_cliente')
 def formulario_agregar_cliente():
-    return render_template("agregar_cliente.html")
+    return render_template("clientes/agregar_cliente.html")
 
 
 @app.route("/guardar_cliente", methods=["POST"])
@@ -73,6 +73,20 @@ def guardar_cliente():
     flash("Cliente guardado exitosamente!", "success")
 
     return redirect(url_for('formulario_agregar_cliente'))
+
+
+'''Esta parte son funciones de estudio'''
+
+
+@app.route('/ver_estudio')
+def ver_estudio():
+    estudios = obtener_estudio()
+    return render_template("estudios/obtener_estudios.html", estudios=estudios)
+
+
+'''@app.route("/formulario_agregar_estudio")
+def formulario_agregar_estudio():
+    return render_template("estudios/agregar_estudio.html")'''
 
 
 app.run(host='0.0.0.0', port=81)
