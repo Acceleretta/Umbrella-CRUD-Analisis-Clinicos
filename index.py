@@ -118,4 +118,44 @@ def actualizar_estudio():
     return redirect("/ver_estudio")
 
 
+'''Parte de orden'''
+
+
+@app.route("/ver_clientes_orden")
+def ver_clientes_orden():
+    clientes = obtener_cliente()
+    return render_template("orden_analisis/obtener_cliente_orden.html", clientes=clientes)
+
+
+@app.route('/formulario_generar_orden/<int:idCliente>')
+def formulario_generar_orden(idCliente):
+    cliente = obtener_cliente_por_id(idCliente)
+    estudios = obtener_estudio()
+    return render_template("orden_analisis/generar_orden.html", cliente=cliente, estudios=estudios)
+
+
+@app.route("/guardar_orden", methods=["POST"])
+def guardar_orden():
+    id_cliente = request.form["idCliente"]
+    nombre_estudio = request.form["idEstudio"]
+    estudios = obtener_estudio()
+    # Buscar el ID del estudio correspondiente al nombre seleccionado
+    id_estudio = None
+    for estudio in estudios:
+        if estudio[1] == nombre_estudio:
+            id_estudio = estudio[0]
+            break
+
+    if id_estudio is not None:
+        print(f"ID Cliente: {id_cliente}")
+        print(f"ID Estudio: {id_estudio}")
+
+        generar_orden(id_cliente, id_estudio)
+        flash("Orden generada exitosamente!", "success")
+    else:
+        flash("Error al obtener el ID del estudio", "error")
+
+    return redirect(url_for('ver_clientes_orden'))
+
+
 app.run(host='0.0.0.0', port=81)

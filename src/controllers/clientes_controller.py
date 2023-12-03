@@ -64,5 +64,9 @@ def modificar_cliente(idCliente, nombreCliente, apellidoPatCliente, apellidoMatC
     conn.close()
 
 
-def generar_orden():
-    '''sp_registrar_cliente_generar_orden'''
+def generar_orden(idCliente, idEstudio):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        cursor.callproc('sp_generar_orden', (idCliente, idEstudio))
+    conn.commit()
+    conn.close()
