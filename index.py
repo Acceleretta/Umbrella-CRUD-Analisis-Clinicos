@@ -137,7 +137,8 @@ def formulario_generar_orden(idCliente):
 @app.route("/guardar_orden", methods=["POST"])
 def guardar_orden():
     id_cliente = request.form["idCliente"]
-    nombre_estudio = request.form["idEstudio"]
+    nombre_estudio = request.form["nombreEstudio"]
+    razon_factura = request.form["razonFactura"]
     estudios = obtener_estudio()
     # Buscar el ID del estudio correspondiente al nombre seleccionado
     id_estudio = None
@@ -146,14 +147,8 @@ def guardar_orden():
             id_estudio = estudio[0]
             break
 
-    if id_estudio is not None:
-        print(f"ID Cliente: {id_cliente}")
-        print(f"ID Estudio: {id_estudio}")
-
-        generar_orden(id_cliente, id_estudio)
-        flash("Orden generada exitosamente!", "success")
-    else:
-        flash("Error al obtener el ID del estudio", "error")
+    orden_id = generar_orden(id_cliente, id_estudio)
+    generar_factura(orden_id, razon_factura)
 
     return redirect(url_for('ver_clientes_orden'))
 

@@ -52,6 +52,8 @@
         background-color: #8B0000;
     }
 
+
+
     </style>
 </head>
 <body>
@@ -72,13 +74,26 @@
                    aria-haspopup="true" aria-expanded="false">
                     Clientes
                 </a>
-                <div class="dropdown-menu custom-dropdown-menu border-0 shadow-none position-absolute start-0" aria-labelledby="clientesDropdown">
+                <div class="dropdown-menu custom-dropdown-menu border-0 shadow-none position-absolute start-0"
+                     aria-labelledby="clientesDropdown">
                     <a class="dropdown-item" href="{{ url_for('ver_cliente') }}">Manejar Datos</a>
                     <a class="dropdown-item" href="{{ url_for('ver_clientes_orden') }}">Solicitar de Análisis</a>
                 </div>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('ver_estudio') }}">Estudios</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="historialDropdwon" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Historial
+                </a>
+                <div class="dropdown-menu custom-dropdown-menu border-0 shadow-none position-absolute start-0"
+                     aria-labelledby="clientesDropdown">
+                    <a class="dropdown-item" href="{{ url_for('ver_cliente') }}">Precios</a>
+                    <a class="dropdown-item" href="{{ url_for('ver_clientes_orden') }}">Rangos</a>
+                    <a class="dropdown-item" href="{{ url_for('ver_clientes_orden') }}">Resultados</a>
+                </div>
             </li>
         </ul>
     </div>

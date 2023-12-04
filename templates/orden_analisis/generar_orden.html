@@ -6,10 +6,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Generar Orden</title>
-    <style>A
+    <style>
         .custom-bg {
         background-color: #8B0000 !important;
         border-color: #8B0000 !important;
+        }
+        input[readonly] {
+        background-color: #f4f4f4; /* Cambia el color de fondo */
+        color: #888; /* Cambia el color del texto */
+        border: 1px solid #ddd; /* Cambia el borde si es necesario */
         }
 
 
@@ -20,16 +25,24 @@
     function toggleAnalisisDropdown() {
         $("#analisisDropdown").toggle();
     }
-    function updateMonto() {
-    // Obtener el valor seleccionado del campo de análisis
-    var selectedEstudio = $("#exampleDataList").val();
+    $(document).ready(function() {
+        // Capturar el evento de cambio en el campo de análisis
+        $('#exampleDataList').change(function() {
+            // Obtener el valor seleccionado del análisis
+            var selectedAnalysis = $(this).val();
 
-    // Buscar el estudio correspondiente en la lista de estudios
-    var estudio = {% for estudio in estudios %}{% if estudio[1] == selectedEstudio %}{{ estudio }}{% endif %}{% endfor %};
+            // Buscar el análisis en la lista de estudios
+            {% for estudio in estudios %}
+                if ("{{ estudio[1] }}" === selectedAnalysis) {
+                    // Actualizar el campo de monto con el valor correspondiente
+                    $('#monto').val("{{ estudio[2] }}");
+                }
+            {% endfor %}
+        });
+    });
 
-    // Actualizar el valor del campo de monto
-    $("#monto").val(estudio[2]);
-    }
+
+
     </script>
 </head>
 <body>
@@ -86,13 +99,20 @@
         <div class="form-group row">
             <label class="col-sm-3 col-form-label">Análisis:</label>
             <div class="col-sm-9">
-                <input class="form-control" list="datalistOptions" id="exampleDataList" name="idEstudio"
-                       placeholder="Escriba el tipo de análisis">
+                <input class="form-control" list="datalistOptions" id="exampleDataList" name="nombreEstudio"
+                       placeholder="Escriba el tipo de análisis" required>
                 <datalist id="datalistOptions">
                     {% for estudio in estudios %}
                     <option value="{{ estudio[1] }}">
                         {% endfor %}
                 </datalist>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Monto:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="monto" name="monto" disabled>
             </div>
         </div>
 
@@ -100,15 +120,10 @@
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Razón de Factura:</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" name="razonFactura">
+                    <input type="text" class="form-control" name="razonFactura" required>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Monto:</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="monto" name="monto" readonly>
-            </div>
-            </div>
+
         </div>
 
         <div class="form-group row">
@@ -117,6 +132,7 @@
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-secondary" onclick="showFacturaOptions()">Sí</button>
                     <button type="button" class="btn btn-secondary" onclick="hideFacturaOptions()">No</button>
+                    <input type="hidden" name="factura" id="facturaInput" value="0">
                 </div>
             </div>
         </div>
@@ -142,19 +158,14 @@
 
 <script>
 function showFacturaOptions() {
-    $("#facturaOptions").show();
-}
-
+    document.getElementById('facturaInput').value = '1';
+    document.getElementById('facturaOptions').style.display = 'block';
+    }
 function hideFacturaOptions() {
-    $("#facturaOptions").hide();
-}
-
-
-
-
+        document.getElementById('facturaInput').value = '0';
+        document.getElementById('facturaOptions').style.display = 'none';
+        }
 </script>
 {% endblock %}
-
-
 </body>
 </html>
