@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <title>Ver Clientes</title>
+    <title>Ordenes sin resultado</title>
     <style>
         .custom-bg {
             background-color: #8B0000 !important;
             border-color: #8B0000 !important;
         }
+
     </style>
 </head>
 <body>
@@ -18,29 +19,26 @@
 {% block content %}
 
 <div class="container mt-5">
-    <h3 class="display-4 text-center mb-4">Historial de Precios</h3>
+    <h3 class="display-4 text-center mb-4">Ordenes sin resultado</h3>
+
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
-                <th scope="col">Estudio</th>
-                <th scope="col">Precio Anterior</th>
-                <th scope="col">Precio Nuevo </th>
-                <th scope="col">Fecha de Cambio</th>
+                <th scope="col">Id_Orden_Analisis</th>
+                <th scope="col">Id_Cliente</th>
+                <th scope="col">Fecha</th>
             </tr>
             </thead>
             <tbody>
-            {% for precio in precios %}
+            {% for orden in ordenes_sin_resultado %}
             <tr>
-                <td>{{cliente[1]}}</td>
-                <td>{{cliente[2]}}</td>
-                <td>{{cliente[3]}}</td>
-                <td>{{cliente[4]}}</td>
-                <td>{{cliente[5]}}</td>
-                <td>{{cliente[6]}}</td>
+                <td>{{orden[0]}}</td>
+                <td>{{orden[1]}}</td>
+                <td>{{orden[2]}}</td>
                 <td>
-                    <a href="{{url_for('formulario_generar_orden', idCliente=cliente[0])}}"
-                       class="btn btn-danger custom-bg btn-sm">Generar Orden de Análisis</a>
+                    <a href="{{url_for('formulario_generar_resultados', idDetalleOrden = orden[3])}}"
+                       class="btn btn-danger custom-bg btn-sm">Registrar Resultado</a>
                 </td>
             </tr>
             {% endfor %}

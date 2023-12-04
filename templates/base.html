@@ -54,6 +54,8 @@
 
 
 
+
+
     </style>
 </head>
 <body>
@@ -90,11 +92,24 @@
                 </a>
                 <div class="dropdown-menu custom-dropdown-menu border-0 shadow-none position-absolute start-0"
                      aria-labelledby="clientesDropdown">
-                    <a class="dropdown-item" href="{{ url_for('ver_cliente') }}">Precios</a>
-                    <a class="dropdown-item" href="{{ url_for('ver_clientes_orden') }}">Rangos</a>
+                    <a class="dropdown-item" href="{{ url_for('ver_historial_precios') }}">Precios</a>
+                    <a class="dropdown-item" href="{{ url_for('ver_historial_rangos') }}">Rangos</a>
                     <a class="dropdown-item" href="{{ url_for('ver_clientes_orden') }}">Resultados</a>
                 </div>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="resultadoDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Resultados
+                </a>
+                <div class="dropdown-menu custom-dropdown-menu border-0 shadow-none position-absolute start-0"
+                     aria-labelledby="clientesDropdown">
+                    <a class="dropdown-item" href="{{ url_for('ver_ordenes_sin_resultado') }}">Ordenes Pendientes</a>
+                    <a class="dropdown-item" href="{{ url_for('ver') }}">Manejar Resultados</a>
+                    <a class="dropdown-item" href="{{ url_for('ver_clientes_orden') }}">Resultados</a>
+                </div>
+            </li>
+
         </ul>
     </div>
 </nav>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Historial de Resultados</title>
+    <style>
+        .custom-bg {
+            background-color: #8B0000 !important;
+            border-color: #8B0000 !important;
+        }
+
+    </style>
+</head>
+<body>
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <h3 class="display-4 text-center mb-4">Historial de Resultados</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Nombre Estudio</th>
+                <th scope="col">ID del resultado</th>
+                <th scope="col">Valor Anterior</th>
+                <th scope="col">Valor Nuevo</th>
+                <th scope="col">Fecha de Cambio</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for resultado in resultados %}
+            <tr>
+                <td>{{resultado[1]}}</td>
+                <td>{{resultado[2]}}</td>
+                <td>{{resultado[3]}}</td>
+                <td>{{resultado[4]}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}
+</body>
+</html>

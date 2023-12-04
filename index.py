@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, flash, url_for
 
 from src.controllers.clientes_controller import *
 from src.controllers.estudios_controller import *
+from src.controllers.historial_controller import *
+from src.controllers.resultados_controller import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
@@ -75,7 +77,7 @@ def guardar_cliente():
     return redirect(url_for('formulario_agregar_cliente'))
 
 
-'''Esta parte son funciones de estudio'''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''Esta parte son funciones de estudio'''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 
 @app.route('/ver_estudio')
@@ -118,7 +120,7 @@ def actualizar_estudio():
     return redirect("/ver_estudio")
 
 
-'''Parte de orden'''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''Parte de orden de analisis'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 
 @app.route("/ver_clientes_orden")
@@ -151,6 +153,47 @@ def guardar_orden():
     generar_factura(orden_id, razon_factura)
 
     return redirect(url_for('ver_clientes_orden'))
+
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''Historial '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+@app.route('/ver_historial_precios')
+def ver_historial_precios():
+    precios = obtener_historial_precios()
+    return render_template("historial/historial_precios.html", precios=precios)
+
+
+@app.route('/ver_historial_rangos')
+def ver_historial_rangos():
+    rangos = obtener_historial_rangos()
+    return render_template("historial/historial_rangos.html", rangos=rangos)
+
+
+@app.route('/ver_historial_resultados')
+def ver_historial_resultados():
+    resultados = obtener_historial_resultados()
+    return render_template("historial/historial_rangos.html", resultados=resultados)
+
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''Resultados '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+@app.route('/ver_ordenes_sin_resultado')
+def ver_ordenes_sin_resultado():
+    ordenes_sin_resultado = obtener_ordenes_sin_resultados()
+    return render_template("resultados/obtener_ordenes_sin_resultado.html", ordenes_sin_resultado=ordenes_sin_resultado)
+
+
+@app.route('/formulario_generar_resultados/<int:idDetalleOrden>')
+def formulario_generar_resultados(idDetalleOrden):
+    return render_template("resultados/agregar_resultado.html", idDetalleOrden=idDetalleOrden)
+
+
+@app.route("/guardar_resultado", methods=["POST"])
+def guardar_resultado():
+    insertar_resultado(request.form["valor"], request.form["idDetalleOrden"])
+    return redirect(url_for('index'))
 
 
 app.run(host='0.0.0.0', port=81)
