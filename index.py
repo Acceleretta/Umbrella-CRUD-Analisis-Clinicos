@@ -196,4 +196,22 @@ def guardar_resultado():
     return redirect(url_for('index'))
 
 
+@app.route("/ver_resultados")
+def ver_resultados():
+    resultados = obtener_resultados()
+    return render_template("resultados/obtener_resultados.html", resultados=resultados)
+
+
+@app.route("/formulario_editar_resultado/<int:idResultado>")
+def formulario_editar_resultado(idResultado):
+    resultado = obtener_resultados_por_id(idResultado)
+    return render_template("resultados/editar_resultado.html", resultado=resultado)
+
+
+@app.route("/actualizar_resultado", methods=["POST"])
+def actualizar_resultado():
+    modificar_resultado(request.form["idResultado"], request.form["idOrden"], request.form["valor"])
+    return redirect("/ver_resultados")
+
+
 app.run(host='0.0.0.0', port=81)
