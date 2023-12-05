@@ -50,3 +50,13 @@ def modificar_resultado(idResultadoAnalisis, idDetalleOrden, valor):
                         (idResultadoAnalisis, idDetalleOrden, valor))
     conn.commit()
     conn.close()
+
+
+def obtener_resultado_id_orden(idResultado):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        cursor.callproc('sp_obtener_resultado_id_orden', (idResultado,))
+        resultado = cursor.fetchone()
+    conn.commit()
+    conn.close()
+    return resultado

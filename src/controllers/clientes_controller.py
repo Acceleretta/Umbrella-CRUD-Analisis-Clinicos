@@ -75,7 +75,7 @@ def generar_orden(idCliente, idEstudio):
 def generar_factura(razonFactura):
     conn = get_connection()
     with conn.cursor() as cursor:
-        cursor.callproc('sp_crear_factura', (razonFactura, ))
+        cursor.callproc('sp_crear_factura', (razonFactura,))
     conn.commit()
     conn.close()
 
@@ -84,9 +84,9 @@ def obtener_factura():
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
-            cursor.callproc('sp_obtener_cliente')
-            clientes = cursor.fetchall()
+            cursor.callproc('sp_obtener_facturas')
+            facturas = cursor.fetchall()
     finally:
         conn.close()
 
-    return clientes
+    return facturas

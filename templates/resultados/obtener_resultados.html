@@ -11,6 +11,7 @@
             background-color: #8B0000 !important;
             border-color: #8B0000 !important;
         }
+
     </style>
 </head>
 <body>
@@ -40,10 +41,8 @@
                        class="btn btn-danger custom-bg btn-sm">Editar</a>
                 </td>
                 <td>
-                    <form action="" method="POST">
-                        <input type="hidden" name="id" value="">
-                        <button type="submit" class="btn btn-dark btn-sm">Generar Reporte</button>
-                    </form>
+                    <a href="{{ url_for('guardar_reporte', id_resultado=resultado[0]) }}"
+                       class="btn btn-dark btn-sm">Generar Reporte</a>
                 </td>
             </tr>
             {% endfor %}
