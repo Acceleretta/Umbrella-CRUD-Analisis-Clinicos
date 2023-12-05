@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, url_for, send_file
+from reportlab.pdfgen import canvas
 
 from src.controllers.clientes_controller import *
 from src.controllers.estudios_controller import *
@@ -212,6 +213,39 @@ def formulario_editar_resultado(idResultado):
 def actualizar_resultado():
     modificar_resultado(request.form["idResultado"], request.form["idOrden"], request.form["valor"])
     return redirect("/ver_resultados")
+
+
+@app.route("/ver_facturas")
+def ver_facturas():
+    facturas = obtener_factura()
+    return render_template("obtener_facturas.html", facturas=facturas)
+
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''Reporte '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+@app.route("/guardar_reporte/<int:id_resultado>")
+def guardar_reporte(id_resultado):
+    datos = obtener_resultado_id_orden(id_resultado)
+    pdf_path = generate_pdf(datos)
+    return send_file(pdf_path, as_attachment=True)
+
+
+def generate_pdf(datos):
+    pdf_path = "informe.pdf"
+    c = canvas.Canvas(pdf_path)
+    c.drawString(100, 800, f"ID Resultado: {datos[0]}")
+    c.drawString(100, 780, f"ID Cliente: {datos[1]}")
+    c.drawString(100, 760, f"ID orden de analisis: {datos[5]}")
+    c.drawString(100, 740, f"Nombre: {datos[2]}")
+    c.drawString(100, 720, f"Apellido Paterno: {datos[3]}")
+    c.drawString(100, 700, f"Apellido Materno: {datos[4]}")
+    c.drawString(100, 680, f"Valor: {datos[6]}")
+    c.drawString(100, 660, f"Fecha: {datos[7]}")
+    c.drawString(100, 640, f"Estado: {datos[10]}")
+    # Agrega más contenido según sea necesario
+    c.save()
+    return pdf_path
 
 
 app.run(host='0.0.0.0', port=81)
