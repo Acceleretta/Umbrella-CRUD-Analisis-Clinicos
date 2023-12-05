@@ -66,19 +66,27 @@ def modificar_cliente(idCliente, nombreCliente, apellidoPatCliente, apellidoMatC
 
 def generar_orden(idCliente, idEstudio):
     conn = get_connection()
-    idOrden = None
     with conn.cursor() as cursor:
-        resultado = cursor.callproc('sp_generar_orden', (idCliente, idEstudio, idOrden))
-        cursor.execute("SELECT @idOrden")
-        idOrden = cursor.fetchone()[0]
-        conn.commit()  # Realiza el commit dentro del bloque with
-    conn.close()
-    return idOrden
-
-
-def generar_factura(idOrden, razonFactura):
-    conn = get_connection()
-    with conn.cursor() as cursor:
-        cursor.callproc('sp_crear_factura', (idOrden, razonFactura))
+        cursor.callproc('sp_generar_orden', (idCliente, idEstudio))
     conn.commit()
     conn.close()
+
+
+def generar_factura(razonFactura):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        cursor.callproc('sp_crear_factura', (razonFactura, ))
+    conn.commit()
+    conn.close()
+
+
+def obtener_factura():
+    conn = get_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.callproc('sp_obtener_cliente')
+            clientes = cursor.fetchall()
+    finally:
+        conn.close()
+
+    return clientes

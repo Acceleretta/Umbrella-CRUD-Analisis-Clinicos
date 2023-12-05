@@ -149,8 +149,8 @@ def guardar_orden():
             id_estudio = estudio[0]
             break
 
-    orden_id = generar_orden(id_cliente, id_estudio)
-    generar_factura(orden_id, razon_factura)
+    generar_orden(id_cliente, id_estudio)
+    generar_factura(razon_factura)
 
     return redirect(url_for('ver_clientes_orden'))
 
@@ -173,7 +173,7 @@ def ver_historial_rangos():
 @app.route('/ver_historial_resultados')
 def ver_historial_resultados():
     resultados = obtener_historial_resultados()
-    return render_template("historial/historial_rangos.html", resultados=resultados)
+    return render_template("historial/historial_resultados.html", resultados=resultados)
 
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''Resultados '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
