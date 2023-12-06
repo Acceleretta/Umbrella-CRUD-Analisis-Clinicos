@@ -1,6 +1,7 @@
 create table if not exists cliente
 (
     Id_Cliente       int auto_increment
+        constraint `PRIMARY`
         primary key,
     Nombre           varchar(50) not null,
     Ap_Paterno       varchar(50) not null,
@@ -13,6 +14,7 @@ create table if not exists cliente
 create table if not exists estudio
 (
     Id_Estudio   int auto_increment
+        constraint `PRIMARY`
         primary key,
     Nombre       varchar(50)     not null,
     Precio       double unsigned not null,
@@ -23,6 +25,7 @@ create table if not exists estudio
 create table if not exists cambio_precio
 (
     Id_Cambio_Precio int auto_increment
+        constraint `PRIMARY`
         primary key,
     Id_Estudio       int             not null,
     Precio_Anterior  double unsigned null,
@@ -35,6 +38,7 @@ create table if not exists cambio_precio
 create table if not exists cambio_rango
 (
     Id_Cambio_Rango       int auto_increment
+        constraint `PRIMARY`
         primary key,
     Id_Estudio            int  not null,
     Rango_Inicio_Anterior int  null,
@@ -46,7 +50,7 @@ create table if not exists cambio_rango
         foreign key (Id_Estudio) references estudio (Id_Estudio)
 );
 
-create definer = root@localhost trigger tr_cambio_precio
+create trigger tr_cambio_precio
     after update
     on estudio
     for each row
@@ -55,7 +59,7 @@ BEGIN
     values (OLD.Id_Estudio, OLD.Precio, NOW(), NEW.Precio);
 END;
 
-create definer = root@localhost trigger tr_cambio_rango
+create trigger tr_cambio_rango
     after update
     on estudio
     for each row
@@ -68,6 +72,7 @@ END;
 create table if not exists orden_analisis
 (
     Id_Orden_Analisis int auto_increment
+        constraint `PRIMARY`
         primary key,
     Id_Cliente        int      not null,
     Fecha             datetime not null,
@@ -78,6 +83,7 @@ create table if not exists orden_analisis
 create table if not exists detalle_orden
 (
     Id_Detalle_Orden  int auto_increment
+        constraint `PRIMARY`
         primary key,
     Id_Orden_Analisis int not null,
     Id_Estudio        int not null,
@@ -90,6 +96,7 @@ create table if not exists detalle_orden
 create table if not exists factura
 (
     Id_Factura        int auto_increment
+        constraint `PRIMARY`
         primary key,
     Id_Orden_Analisis int    null,
     Fecha             date   not null,
@@ -102,6 +109,7 @@ create table if not exists factura
 create table if not exists resultado_analisis
 (
     Id_Resultado_Analisis int auto_increment
+        constraint `PRIMARY`
         primary key,
     Id_Detalle_Orden      int      null,
     Valor                 int      not null,
@@ -113,6 +121,7 @@ create table if not exists resultado_analisis
 create table if not exists cambio_resultado
 (
     Id_Cambio_Resultado   int auto_increment
+        constraint `PRIMARY`
         primary key,
     Id_Resultado_Analisis int  not null,
     Valor_Anterior        int  null,
@@ -122,7 +131,7 @@ create table if not exists cambio_resultado
         foreign key (Id_Resultado_Analisis) references resultado_analisis (Id_Resultado_Analisis)
 );
 
-create definer = root@localhost trigger tr_cambio_resultado
+create trigger tr_cambio_resultado
     after update
     on resultado_analisis
     for each row
@@ -131,7 +140,7 @@ BEGIN
     values (OLD.Id_Resultado_Analisis, OLD.Valor, NEW.Valor, NOW());
 END;
 
-create definer = root@localhost view vista_cambio_precio as
+create view vista_cambio_precio as
 select `cp`.`Id_Cambio_Precio` AS `Id_Cambio_Precio`,
        `e`.`Nombre`            AS `Nombre_Estudio`,
        `cp`.`Precio_Anterior`  AS `Precio_Anterior`,
@@ -139,7 +148,7 @@ select `cp`.`Id_Cambio_Precio` AS `Id_Cambio_Precio`,
        `cp`.`Fecha_Cambio`     AS `Fecha_Cambio`
 from (`umbrelladb`.`cambio_precio` `cp` join `umbrelladb`.`estudio` `e` on ((`cp`.`Id_Estudio` = `e`.`Id_Estudio`)));
 
-create definer = root@localhost view vista_cambio_rango as
+create view vista_cambio_rango as
 select `cr`.`Id_Cambio_Rango`       AS `Id_Cambio_Rango`,
        `e`.`Nombre`                 AS `Nombre_Estudio`,
        `cr`.`Rango_Inicio_Anterior` AS `Rango_Inicio_Anterior`,
@@ -149,7 +158,7 @@ select `cr`.`Id_Cambio_Rango`       AS `Id_Cambio_Rango`,
        `cr`.`Fecha_Cambio`          AS `Fecha_Cambio`
 from (`umbrelladb`.`cambio_rango` `cr` join `umbrelladb`.`estudio` `e` on ((`cr`.`Id_Estudio` = `e`.`Id_Estudio`)));
 
-create definer = root@localhost view vista_cambio_resultado as
+create view vista_cambio_resultado as
 select `cr`.`Id_Cambio_Resultado` AS `Id_Cambio_Resultado`,
        `oa`.`Id_Orden_Analisis`   AS `Id_Orden_Analisis`,
        `cr`.`Valor_Anterior`      AS `Valor_Anterior`,
@@ -160,7 +169,7 @@ from (((`umbrelladb`.`cambio_resultado` `cr` join `umbrelladb`.`resultado_analis
        on ((`ra`.`Id_Detalle_Orden` = `do`.`Id_Detalle_Orden`))) join `umbrelladb`.`orden_analisis` `oa`
       on ((`do`.`Id_Orden_Analisis` = `oa`.`Id_Orden_Analisis`)));
 
-create definer = root@localhost view vista_ordenes_sin_resultados as
+create view vista_ordenes_sin_resultados as
 select `o`.`Id_Orden_Analisis` AS `Id_Orden_Analisis`,
        `o`.`Id_Cliente`        AS `Id_Cliente`,
        `o`.`Fecha`             AS `Fecha`,
@@ -170,7 +179,7 @@ from ((`umbrelladb`.`orden_analisis` `o` left join `umbrelladb`.`detalle_orden` 
       on ((`d`.`Id_Detalle_Orden` = `r`.`Id_Detalle_Orden`)))
 where (`r`.`Id_Resultado_Analisis` is null);
 
-create definer = root@localhost view vista_resultados_con_rango as
+create view vista_resultados_con_rango as
 select `r`.`Id_Resultado_Analisis`                                                                           AS `Id_Resultado_Analisis`,
        `c`.`Id_Cliente`                                                                                      AS `Id_Cliente`,
        `c`.`Nombre`                                                                                          AS `Nombre`,
@@ -189,12 +198,10 @@ from ((((`umbrelladb`.`cliente` `c` join `umbrelladb`.`orden_analisis` `oa`
        on ((`do`.`Id_Estudio` = `e`.`Id_Estudio`))) join `umbrelladb`.`resultado_analisis` `r`
       on ((`do`.`Id_Detalle_Orden` = `r`.`Id_Detalle_Orden`)));
 
-create
-    definer = root@localhost procedure sp_actualizar_cliente(IN idCliente int, IN nombreCliente varchar(50),
-                                                             IN apellidoPatCliente varchar(50),
-                                                             IN apellidoMatCliente varchar(50),
-                                                             IN nacimientoCliente date, IN telefonoCliente varchar(10),
-                                                             IN correoCliente varchar(50))
+create procedure sp_actualizar_cliente(IN idCliente int, IN nombreCliente varchar(50),
+                                       IN apellidoPatCliente varchar(50), IN apellidoMatCliente varchar(50),
+                                       IN nacimientoCliente date, IN telefonoCliente varchar(10),
+                                       IN correoCliente varchar(50))
 BEGIN
     UPDATE cliente
     SET Nombre           = nombreCliente,
@@ -206,10 +213,8 @@ BEGIN
     WHERE Id_Cliente = idCliente;
 END;
 
-create
-    definer = root@localhost procedure sp_actualizar_estudio(IN idEstudio int, IN nombreEstudio varchar(50),
-                                                             IN costoEstudio double unsigned, IN rangoIncioEstudio int,
-                                                             IN rangoFinEstudio int)
+create procedure sp_actualizar_estudio(IN idEstudio int, IN nombreEstudio varchar(50), IN costoEstudio double unsigned,
+                                       IN rangoIncioEstudio int, IN rangoFinEstudio int)
 BEGIN
     UPDATE estudio
     SET Nombre       = nombreEstudio,
@@ -219,8 +224,7 @@ BEGIN
         WHERE Id_Estudio = idEstudio;
 END;
 
-create
-    definer = root@localhost procedure sp_actualizar_resultado(IN idResultadoAnalisis int, IN idDetalleOrden int, IN valorResultado int)
+create procedure sp_actualizar_resultado(IN idResultadoAnalisis int, IN idDetalleOrden int, IN valorResultado int)
 BEGIN
     UPDATE resultado_analisis
     SET Id_Detalle_Orden = idDetalleOrden,
@@ -229,28 +233,23 @@ BEGIN
     WHERE Id_Resultado_Analisis = idResultadoAnalisis;
 END;
 
-create
-    definer = root@localhost procedure sp_borrar_cliente(IN idCliente int)
+create procedure sp_borrar_cliente(IN idCliente int)
 BEGIN
     DELETE FROM cliente WHERE Id_Cliente = idCliente;
 END;
 
-create
-    definer = root@localhost procedure sp_borrar_estudio(IN idEstudio int)
+create procedure sp_borrar_estudio(IN idEstudio int)
 BEGIN
     DELETE FROM estudio WHERE Id_Estudio = idEstudio;
 END;
 
-create
-    definer = root@localhost procedure sp_buscar_clientes(IN nombreCliente varchar(50),
-                                                          IN apellidoPatCliente varchar(50),
-                                                          IN apellidoMatCliente varchar(50))
+create procedure sp_buscar_clientes(IN nombreCliente varchar(50), IN apellidoPatCliente varchar(50),
+                                    IN apellidoMatCliente varchar(50))
 BEGIN
     SELECT * FROM cliente WHERE nombre LIKE CONCAT('%', nombreCliente, '%');
 END;
 
-create
-    definer = root@localhost procedure sp_crear_factura(IN razonFactura text)
+create procedure sp_crear_factura(IN razonFactura text)
 BEGIN
     DECLARE exit handler for sqlexception
         BEGIN
@@ -281,15 +280,13 @@ BEGIN
     COMMIT;
 END;
 
-create
-    definer = root@localhost procedure sp_crear_resultado(IN valorResultado int, IN idDetalleOrden int)
+create procedure sp_crear_resultado(IN valorResultado int, IN idDetalleOrden int)
 BEGIN
     INSERT INTO resultado_analisis (Id_Detalle_Orden, Valor, Fecha)
     VALUES (idDetalleOrden, valorResultado, NOW());
 END;
 
-create
-    definer = root@localhost procedure sp_generar_orden(IN idCliente int, IN idEstudio int)
+create procedure sp_generar_orden(IN idCliente int, IN idEstudio int)
 BEGIN
     DECLARE idOrden INT;
     -- Generar Orden de Análisis
@@ -304,109 +301,89 @@ BEGIN
     VALUES (idOrden, idEstudio);
 END;
 
-create
-    definer = root@localhost procedure sp_insertar_cliente(IN nombreCliente varchar(50),
-                                                           IN apellidoPatCliente varchar(50),
-                                                           IN apellidoMatCliente varchar(50), IN nacimientoCliente date,
-                                                           IN telefonoCliente varchar(10), IN correoCliente varchar(50))
+create procedure sp_insertar_cliente(IN nombreCliente varchar(50), IN apellidoPatCliente varchar(50),
+                                     IN apellidoMatCliente varchar(50), IN nacimientoCliente date,
+                                     IN telefonoCliente varchar(10), IN correoCliente varchar(50))
 BEGIN
     INSERT INTO Cliente (Nombre, Ap_Paterno, Ap_Materno, Fecha_Nacimiento, Telefono, Correo)
     VALUES (nombreCliente, apellidoPatCliente, apellidoMatCliente, nacimientoCliente, telefonoCliente,
             correoCliente);
 END;
 
-create
-    definer = root@localhost procedure sp_insertar_estudio(IN nombreEstudio varchar(50),
-                                                           IN costoEstudio double unsigned, IN rangoIncioEstudio int,
-                                                           IN rangoFinEstudio int)
+create procedure sp_insertar_estudio(IN nombreEstudio varchar(50), IN costoEstudio double unsigned,
+                                     IN rangoIncioEstudio int, IN rangoFinEstudio int)
 BEGIN
     INSERT INTO estudio (Nombre, Precio, Rango_Inicio, Rango_Fin)
     VALUES (nombreEstudio, costoEstudio, rangoIncioEstudio, rangoFinEstudio);
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_cliente()
+create procedure sp_obtener_cliente()
 BEGIN
     SELECT * from cliente;
 
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_cliente_id(IN idCliente int)
+create procedure sp_obtener_cliente_id(IN idCliente int)
 BEGIN
     SELECT * from cliente WHERE Id_Cliente = idCliente;
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_estudio()
+create procedure sp_obtener_estudio()
 BEGIN
     SELECT * FROM estudio;
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_estudio_id(IN idEstudio int)
+create procedure sp_obtener_estudio_id(IN idEstudio int)
 BEGIN
     SELECT * from estudio WHERE Id_Estudio = idEstudio;
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_facturas()
+create procedure sp_obtener_facturas()
 BEGIN
     SELECT * FROM factura;
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_historial_precios()
+create procedure sp_obtener_historial_precios()
 BEGIN
     SELECT * FROM vista_cambio_precio;
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_historial_rangos()
+create procedure sp_obtener_historial_rangos()
 BEGIN
     SELECT * FROM vista_cambio_rango;
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_historial_resultados()
+create procedure sp_obtener_historial_resultados()
 BEGIN
     SELECT * FROM vista_cambio_resultado;
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_ordenes_sin_resultados()
+create procedure sp_obtener_ordenes_sin_resultados()
 BEGIN
     SELECT * FROM vista_ordenes_sin_resultados;
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_resultado_id_orden(IN idResultado int)
+create procedure sp_obtener_resultado_id_orden(IN idResultado int)
 BEGIN
     SELECT *
     FROM vista_resultados_con_rango
     where Id_Resultado_Analisis = idResultado;
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_resultados()
+create procedure sp_obtener_resultados()
 BEGIN
     SELECT * FROM resultado_analisis;
 END;
 
-create
-    definer = root@localhost procedure sp_obtener_resultados_id(IN idResultado int)
+create procedure sp_obtener_resultados_id(IN idResultado int)
 BEGIN
     SELECT * from resultado_analisis WHERE Id_Resultado_Analisis = idResultado;
 END;
 
-create
-    definer = root@localhost procedure sp_registrar_cliente_generar_orden(IN nombreCliente varchar(50),
-                                                                          IN apellidoPatCliente varchar(50),
-                                                                          IN apellidoMatCliente varchar(50),
-                                                                          IN nacimientoCliente date,
-                                                                          IN telefonoCliente varchar(10),
-                                                                          IN correoCliente varchar(50),
-                                                                          IN nombreEstudio varchar(50))
+create procedure sp_registrar_cliente_generar_orden(IN nombreCliente varchar(50), IN apellidoPatCliente varchar(50),
+                                                    IN apellidoMatCliente varchar(50), IN nacimientoCliente date,
+                                                    IN telefonoCliente varchar(10), IN correoCliente varchar(50),
+                                                    IN nombreEstudio varchar(50))
 BEGIN
     DECLARE ClienteExistente INT;
 
